@@ -1,39 +1,54 @@
-// const ids = new Set(['Hi', 'from', 'set!']); // ë¬´ì¡°ê±´ ì´ë ‡ê²Œ ì‚¬ìš©í•´ì•¼ í•¨.
+// const ids = new Set(['Hi', 'from', 'set!']); // ë¬´ì¡°ê±? ?´? ‡ê²? ?‚¬?š©?•´?•¼ ?•¨.
 // ids.add(2);
-// ids.delete('213123123'); // ì—ëŸ¬ ì•ˆ ë‚¨.
+// ids.delete('213123123'); // ?—?Ÿ¬ ?•ˆ ?‚¨.
 // if(ids.has('Hi')){
-//     ids.delete('Hi'); // deleteê°€ ëëŠ”ì§€ í™•ì¸ ê°€ëŠ¥
+//     ids.delete('Hi'); // deleteê°? ??Š”ì§? ?™•?¸ ê°??Š¥
 // }
 // console.log(ids.has(2));
-// // 2ê°€ ë‘ ë²ˆ ì¶”ê°€ ë˜ì—ˆì§€ë§Œ 2ê°€ 2ê°œì¸ì§€ í™•ì¸ì€ ëª» í•¨.
+// // 2ê°? ?‘ ë²? ì¶”ê?? ?˜?—ˆì§?ë§? 2ê°? 2ê°œì¸ì§? ?™•?¸??? ëª? ?•¨.
 
 // for (const entry of ids.entries()){
 //     console.log(entry[0]);
 // }
 
-// // Setì—ì„œ ê°’ì˜ ìë£Œí˜•ì€ ì—¬ëŸ¬ ê°œê°€ ì„ì¼ ìˆ˜ ìˆë‹¤.
-// // entries() ëŒ€ì‹ ì— values()ë¥¼ ì‚¬ìš©í•˜ë©´ ì´ëŠ” Set ê°’ì„
-// // í•œ ë²ˆë§Œ ì¶œë ¥í•˜ëŠ” Iterableë¥¼ ë°˜í™˜í•œë‹¤.
-// // ì•„ë‹ˆë©´ console.log(entry[0]);
+// // Set?—?„œ ê°’ì˜ ?ë£Œí˜•??? ?—¬?Ÿ¬ ê°œê?? ?„?¼ ?ˆ˜ ?ˆ?‹¤.
+// // entries() ????‹ ?— values()ë¥? ?‚¬?š©?•˜ë©? ?´?Š” Set ê°’ì„
+// // ?•œ ë²ˆë§Œ ì¶œë ¥?•˜?Š” Iterableë¥? ë°˜í™˜?•œ?‹¤.
+// // ?•„?‹ˆë©? console.log(entry[0]);
 
-const person1 = {name: 'Max'};
-const person2 = {name: 'Manuel'};
+// const person1 = {name: 'Max'};
+// const person2 = {name: 'Manuel'};
 
-const personData = new Map([[person1, [{date: 'yesterday', price : 10}]]]);
+// const personData = new Map([[person1, [{date: 'yesterday', price : 10}]]]);
 
-personData.set(person2,[{date:'two weeks ago', price: 100}]);
+// personData.set(person2,[{date:'two weeks ago', price: 100}]);
+
+// console.log(personData);
+// console.log(personData.get(person1));
+
+// for(const [key, value] of personData.entries()){
+//     console.log(key, value);
+// }
+
+// for(const key of personData.keys()){ // key?—ë§? ? ‘ê·¼í•˜ê³? ?‹¶?„ ?•Œ
+//     console.log(key);
+// }
+
+// for(const value of personData.values()){ // value?—ë§? ? ‘ê·¼í•˜ê³? ?‹¶?„ ?•Œ
+//     console.log(value);
+// }
+
+let person = {name: 'Max'};
+const persons = new WeakSet();
+persons.add(person);
+
+// person = null;
+
+console.log(persons);
+
+const personData = new WeakMap();
+
+personData.set(person, 'Extra info!');
+person = null;
 
 console.log(personData);
-console.log(personData.get(person1));
-
-for(const [key, value] of personData.entries()){
-    console.log(key, value);
-}
-
-for(const key of personData.keys()){ // keyì—ë§Œ ì ‘ê·¼í•˜ê³  ì‹¶ì„ ë•Œ
-    console.log(key);
-}
-
-for(const value of personData.values()){ // valueì—ë§Œ ì ‘ê·¼í•˜ê³  ì‹¶ì„ ë•Œ
-    console.log(value);
-}
