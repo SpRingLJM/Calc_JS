@@ -71,8 +71,8 @@
 
 // console.log(maxIndex);
 
-const prices = [10.99, 5.99, 3.99, 6.59];
-const tax = 0.19;
+// const prices = [10.99, 5.99, 3.99, 6.59];
+// const tax = 0.19;
 // const taxAdjustedPrices = [];
 
 // for(const price of prices){
@@ -80,26 +80,65 @@ const tax = 0.19;
 //     // 왜냐하면 참조 유형 때문이며 상수에 새 값을 할당하지 않고 메모리의 데이터를 변경하기 때문이다.
 // }
 
-const taxAdjustedPrices = prices.map((price, idx, prices) => { // 위에 prices를 여기서 써도 에러 X
-    // 이는 섀도잉 때문에 다른 스코프를 갖기 때문
-    const priceObj = {index: idx, taxAdjPrice : price * (1 + tax)};
-    return priceObj;
-});
+// const taxAdjustedPrices = prices.map((price, idx, prices) => { // 위에 prices를 여기서 써도 에러 X
+//     // 이는 섀도잉 때문에 다른 스코프를 갖기 때문
+//     const priceObj = {index: idx, taxAdjPrice : price * (1 + tax)};
+//     return priceObj;
+// });
 
 // console.log(prices, taxAdjustedPrices);
 
-const sortedPrices = prices.sort((a , b) =>{
-    if(a > b){
-        return 1;
-    } else if(a === b){
-        return 0;
-    } else {
-        return -1;
-    }
-});
+// const sortedPrices = prices.sort((a , b) =>{
+//     if(a > b){
+//         return 1;
+//     } else if(a === b){
+//         return 0;
+//     } else {
+//         return -1;
+//     }
+// });
 // console.log(sortedPrices.reverse());
-console.log(sortedPrices);
+// console.log(sortedPrices);
 
-const filteredArray = prices.filter(price => price > 6);
+// const filteredArray = prices.filter(price => price > 6);
 
-console.log(filteredArray);
+// console.log(filteredArray);
+
+// let sum = 0;
+// prices.forEach((price) => {
+//     sum += price;
+// });
+
+// console.log(sum);
+
+// const sum = prices.reduce((prevValue, curValue) => prevValue + curValue, 0);
+
+// console.log(sum);
+
+// const data = 'new york;10.99;2000';
+
+// const transformedData = data.split(';');
+// console.log(transformedData);
+
+// const nameFragments = ['Jake', 'Lee'];
+// const name = nameFragments.join(' ');
+// console.log(name);
+
+// const copiedNameFragments = [...nameFragments];
+// nameFragments.push('Mr');
+// console.log(nameFragments, copiedNameFragments);
+
+// console.log(Math.min(...prices));
+
+// const persons = [{name : 'Max', age : 30},{name: 'Manuel', age: 31}];
+// const copiedPersons = persons.map(person => ({name: person.name, age: person.age}));
+
+// persons.push({name: 'Anna', age: 29});
+// console.log(persons,copiedPersons);
+
+const nameData = ['Jake', 'Lee', 'Mr', 30];
+// const firstName = nameData[0];
+// const lastName = nameData[1];
+
+const [firstName, lastName, ...otherInformation] = nameData;
+console.log(firstName, lastName, otherInformation);
