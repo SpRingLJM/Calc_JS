@@ -19,10 +19,14 @@ const renderMovies = (filter = '') => {
 
     filteredMovies.forEach((movie) => {
         const movieEl = document.createElement('li');
-        let text = movie.info.title + ' - ';
-        for(const key in movie.info){
+        const { info, ...otherProps } = movie;
+        console.log(otherProps);
+        // const { title: movieTitle } = info;
+        // const {getFormattedTitle} = movie;
+        let text = movie.getFormattedTitle() + ' - ';
+        for(const key in info){
             if(key !== 'title'){
-                text = text + `${key}: ${movie.info[key]}`;
+                text = text + `${key}: ${info[key]}`;
             }
         }
         movieEl.textContent = text;
@@ -34,8 +38,8 @@ const addMovieHandler = () => {
     const title = document.getElementById('title').value;
     const extraName = document.getElementById('extra-name').value;
     const extraValue = document.getElementById('extra-value').value;
-    // ì—¬ê¸°ì„œ valueëŠ” í•´ë‹¹ ìž…ë ¥ DOM ë…¸ë“œì— ì•¡ì„¸ìŠ¤í•´ì„œ
-    // ì‚¬ìš©ìžê°€ ìž…ë ¥í•œ ë‚´ìš©ì˜ value í”„ë¡œí¼í‹°ë§Œ ì·¨í•˜ëŠ” ê²ƒ
+    // ?—¬ê¸°ì„œ value?Š” ?•´?‹¹ ?ž…? ¥ DOM ?…¸?“œ?— ?•¡?„¸?Š¤?•´?„œ
+    // ?‚¬?š©?žê°? ?ž…? ¥?•œ ?‚´?š©?˜ value ?”„ë¡œí¼?‹°ë§? ì·¨í•˜?Š” ê²?
     if (title.trim() === '' || extraName.trim() === '' || extraValue.trim() === '') {
         return;
     }
@@ -44,9 +48,11 @@ const addMovieHandler = () => {
         info:{
             title,
             [extraName]: extraValue
-
         },
-        id: Math.random()
+        id: Math.random().toString(),
+        getFormattedTitle: function(){ // important: Don't use an arrow function
+            return this.info.title.toUpperCase();
+        }
     };
 
     movies.push(newMovie);
