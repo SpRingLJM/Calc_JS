@@ -1,21 +1,62 @@
-const movieList = document.getElementById('movie-list');
+const addMovieBtn = document.getElementById('add-movie-btn');
+const searchBtn = document.getElementById('search-btn');
 
-movieList.style['background-color'] = 'red';
-movieList.style.display = 'block';
+const movies = [];
 
-const userChosenKeyName = 'level';
-const person = {
-    'first name': 'Max',
-    hobbies: ['Sports', 'Cooking'],
-    [userChosenKeyName]: '...',
-    greet: function(){
-        alert('Hi there!');
+const renderMovies = (filter = '') => {
+    const movieList = document.getElementById('movie-list');
+
+    if(movies.length === 0){
+        movieList.classList.remove('visible');
+    } else{
+        movieList.classList.add('visible');
     }
+    movieList.innerHTML = '';
+    
+    const filteredMovies = !filter 
+        ? movies
+         : movies.filter(movie => movie.info.title.includes(filter));
+
+    filteredMovies.forEach((movie) => {
+        const movieEl = document.createElement('li');
+        let text = movie.info.title + ' - ';
+        for(const key in movie.info){
+            if(key !== 'title'){
+                text = text + `${key}: ${movie.info[key]}`;
+            }
+        }
+        movieEl.textContent = text;
+        movieList.append(movieEl);
+    });
 };
 
-person.age = 31;
-person.isAdmin = true;
+const addMovieHandler = () => {
+    const title = document.getElementById('title').value;
+    const extraName = document.getElementById('extra-name').value;
+    const extraValue = document.getElementById('extra-value').value;
+    // 여기서 value는 해당 입력 DOM 노드에 액세스해서
+    // 사용자가 입력한 내용의 value 프로퍼티만 취하는 것
+    if (title.trim() === '' || extraName.trim() === '' || extraValue.trim() === '') {
+        return;
+    }
 
-delete person.age;
+    const newMovie = {
+        info:{
+            title,
+            [extraName]: extraValue
 
-console.log(person['first name']);
+        },
+        id: Math.random()
+    };
+
+    movies.push(newMovie);
+    renderMovies();
+};
+
+const searchMovieHandler = () => {
+    const filterTerm = document.getElementById('filter-title').value;
+    renderMovies(filterTerm);
+};
+
+addMovieBtn.addEventListener('click', addMovieHandler);
+searchBtn.addEventListener('click', searchMovieHandler);
