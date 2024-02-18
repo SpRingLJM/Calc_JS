@@ -1,3 +1,4 @@
+"use strict";
 const addMovieBtn = document.getElementById('add-movie-btn');
 const searchBtn = document.getElementById('search-btn');
 
@@ -8,6 +9,7 @@ const renderMovies = (filter = '') => {
 
     if(movies.length === 0){
         movieList.classList.remove('visible');
+        return;
     } else{
         movieList.classList.add('visible');
     }
@@ -23,9 +25,11 @@ const renderMovies = (filter = '') => {
         console.log(otherProps);
         // const { title: movieTitle } = info;
         // const {getFormattedTitle} = movie;
-        let text = movie.getFormattedTitle() + ' - ';
+        let { getFormattedTitle } = movie;
+        // getFormattedTitle = getFormattedTitle.bind(movie);
+        let text = getFormattedTitle.apply(movie) + ' - ';
         for(const key in info){
-            if(key !== 'title'){
+            if(key !== 'title' && key !== '_title'){
                 text = text + `${key}: ${info[key]}`;
             }
         }
@@ -38,28 +42,42 @@ const addMovieHandler = () => {
     const title = document.getElementById('title').value;
     const extraName = document.getElementById('extra-name').value;
     const extraValue = document.getElementById('extra-value').value;
-    // ?—¬ê¸°ì„œ value?Š” ?•´?‹¹ ?ž…? ¥ DOM ?…¸?“œ?— ?•¡?„¸?Š¤?•´?„œ
-    // ?‚¬?š©?žê°? ?ž…? ¥?•œ ?‚´?š©?˜ value ?”„ë¡œí¼?‹°ë§? ì·¨í•˜?Š” ê²?
+    // ?ï¿½ï¿½ê¸°ì„œ value?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½ DOM ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
+    // ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ value ?ï¿½ï¿½ë¡œí¼?ï¿½ï¿½ï¿½? ì·¨í•˜?ï¿½ï¿½ ï¿½?
     if (title.trim() === '' || extraName.trim() === '' || extraValue.trim() === '') {
         return;
     }
-
+    // Both 'setter(set)' and 'getter(get)' are used, or both are not used.
     const newMovie = {
         info:{
-            title,
+            set title(val) {
+                if(val.trim() === ''){
+                    this._title = 'DEFAULT';
+                    return;
+                }
+                this._title = val;
+            },
+            get title() {
+                return this._title.toUpperCase();
+            },
             [extraName]: extraValue
         },
         id: Math.random().toString(),
-        getFormattedTitle: function(){ // important: Don't use an arrow function
+        getFormattedTitle() { // important: Don't use an arrow function
+            console.log(this);
             return this.info.title.toUpperCase();
         }
     };
+
+    newMovie.info.title = title;
+    console.log(newMovie.info.title);
 
     movies.push(newMovie);
     renderMovies();
 };
 
 const searchMovieHandler = () => {
+    console.log(this);
     const filterTerm = document.getElementById('filter-title').value;
     renderMovies(filterTerm);
 };
