@@ -15,6 +15,30 @@ class Product {
 class ShoppingCart {
     items = [];
 
+    set cartItems(value){
+        this.items = value;
+        // value will be array of cartItems.
+        // So, this means overwriting the existing array with a new array.
+        this.totalOutput.innerHTML = `<h2>Total: \$${this.totalAmount.toFixed(2)}</h2>`;
+    }
+
+    get totalAmount() {
+        const sum = this.items.reduce((prevValue, curItem) => prevValue +curItem.price
+        , 0);
+        // first parameter is 'anonymous arrow function' '=>'
+        // second optional parameter is initial value(0).
+        // anonymous arrow fucntion has many parameters. 
+        // prevValue, curItem
+        return sum;
+    }
+
+    addProdcut(product) {
+        const updatedItems = [...this.items];
+        updatedItems.push(product);
+        this.cartItems = updatedItems;
+        
+    }
+
     render() {
         const cartEl = document.createElement('section');
         cartEl.innerHTML =`
@@ -22,6 +46,7 @@ class ShoppingCart {
             <button>Order Now!</button>
             `;
             cartEl.className = 'cart';
+            this.totalOutput = cartEl.querySelector('h2');
             return cartEl;
     }
 }
@@ -31,8 +56,7 @@ class ProductItem {
     }
 
     addToCart() {
-        console.log('Adding product to cart...');
-        console.log(this.product);
+        App.addProdcutToCart(this.product);
     }
 
     render() {
@@ -90,8 +114,8 @@ class ProductList {
 class Shop {
     render(){
         const renderHook = document.getElementById('app');
-        const cart = new ShoppingCart();
-        const cartEl = cart.render();
+        this.cart = new ShoppingCart();
+        const cartEl = this.cart.render();
         const productList = new ProductList();
         const prodListEl = productList.render();
 
@@ -100,8 +124,20 @@ class Shop {
     }
 }
 
-const shop = new Shop();
-shop.render();
+class App {  // static property, static method -> static init()
+    static cart;
 
+    static init() {
+        const shop = new Shop();
+        shop.render();
+        this.cart = shop.cart;
+    }
+
+    static addProdcutToCart(product){
+        this.cart.addProdcut(product);
+    }
+}
+
+App.init();
 
 // 28 Line : if you want to use standard dollar character, you will use 'Escape Character(\$)'
