@@ -20,10 +20,17 @@ class Product {
     }
 
     class Component{
-        constructor(renderHookId){
+        constructor(renderHookId, shouldRender = true){
             this.hookId = renderHookId;
+            if(shouldRender){
+                this.render();
+            }
         }
         
+    render() {
+
+    }
+
         createRootElement(tag, cssClasses, attributes){
             const rootElement = document.createElement(tag);
             if(cssClasses) {
@@ -60,7 +67,12 @@ class ShoppingCart extends Component {
     }
 
     constructor(renderHookId) {
-        super(renderHookId);
+        super(renderHookId, false);
+        this.orderProducts = () => {
+            console.log('Ordering...');
+            console.log(this.items);
+        }
+        this.render();
     }
 
     addProdcut(product) {
@@ -76,13 +88,17 @@ class ShoppingCart extends Component {
             <h2>Total: \$${0}</h2>
             <button>Order Now!</button>
             `;
+            const orderButton = cartEl.querySelector('button');
+            // orderButton.addEventListener('click', () => this.orderProducts());
+            orderButton.addEventListener('click', this.orderProducts)
             this.totalOutput = cartEl.querySelector('h2');
     }
 }
 class ProductItem extends Component {
     constructor(product, renderHookId) {
-        super(renderHookId);
+        super(renderHookId, false);
         this.product = product;
+        this.render();
         // In this case, calling "super" should precede tasks related to "this".
     }
 
@@ -109,40 +125,54 @@ class ProductItem extends Component {
 }
 // below the class has a 'products' array.
 class ProductList extends Component {
-    products = [
-        new Product(
-            'A Pillow',
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOy5mqWGX5ZEYG2y9v151Novuo6x7sEne1ypjogJlYEw&s',
-            'A soft pillow!',
-            19.99
-        ),
-        new Product(
-            'A Carpet',
-            'https://m.media-amazon.com/images/I/81GyZXnRB5L._AC_UF894,1000_QL80_.jpg',
-            'A carpet which you might like - or not.', 89.99
-        )
-    ];
+    #products = [];
 
     constructor(renderHookId) {
         super(renderHookId);
+        this.render();
+        this.fetchProducts();
+    }
+
+    fetchProducts() {
+        this.#products = [
+            new Product(
+                'A Pillow',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOy5mqWGX5ZEYG2y9v151Novuo6x7sEne1ypjogJlYEw&s',
+                'A soft pillow!',
+                19.99
+            ),
+            new Product(
+                'A Carpet',
+                'https://m.media-amazon.com/images/I/81GyZXnRB5L._AC_UF894,1000_QL80_.jpg',
+                'A carpet which you might like - or not.', 89.99
+            )
+        ];
+        this.renderProducts();
+    }
+
+    renderProducts(){
+        for(const prod of this.#products) {
+            const productItem = new ProductItem(prod, 'prod-list');
+        }
     }
 
     render() {
         const prodList = this.createRootElement('ul', 'product-list', [new ElementAttribute('id', 'prod-list')]);
         // ul = unordered list
-        for(const prod of this.products) {
-            const productItem = new ProductItem(prod, 'prod-list');
-            productItem.render();
+        if(this.#products && this.#products.length > 0){
+            this.renderProducts();
         }
     }
 }
 
-class Shop {
+class Shop extends Component {
+    constructor(){
+        super();
+    }
+
     render(){
         this.cart = new ShoppingCart('app');
-        this.cart.render();
-        const productList = new ProductList('app');
-        productList.render();
+        const list = new ProductList('app');
     }
 }
 
@@ -151,7 +181,6 @@ class App {  // static property, static method -> static init()
 
     static init() {
         const shop = new Shop();
-        shop.render();
         this.cart = shop.cart;
     }
 
